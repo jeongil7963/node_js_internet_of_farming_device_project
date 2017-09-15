@@ -40,18 +40,16 @@ function module_start() {
 }
 
 //filed_id 반환
-setting.get_field_id = function(){
+exports.get_field_id = function(){
   return get_field_id;
 }
 
 //shooting_time 반환
-setting.get_shooting_time = function(){
+exports.get_shooting_time = function(){
   return get_shooting_time;
 }
 
 //water_stop_time 반환
-setting.get_water_stop_time = function(){
+exports.get_water_stop_time = function(){
   return get_field_id;
 }
-
-module.exports = setting
