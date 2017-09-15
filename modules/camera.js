@@ -23,6 +23,8 @@ var config = require('../config.json');
 var field_id;
 var shooting_time;
 
+var camera = new RaspiCam(option);
+
 //setting 변수 설정
 camera.set_config = function (id, shoot) {
   field_id = id;
@@ -46,7 +48,7 @@ var option = {
     th: '0:0:0'
 };
 
-var camera = new RaspiCam(option);
+
 
 //소켓통신으로 이미지 파일을 서버로 전송
 
