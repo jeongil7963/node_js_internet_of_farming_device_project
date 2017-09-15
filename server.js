@@ -41,15 +41,15 @@ function module_start() {
 
 //filed_id 반환
 exports.get_field_id = function(){
-  return get_field_id;
+  return filed_id;
 }
 
 //shooting_time 반환
 exports.get_shooting_time = function(){
-  return get_shooting_time;
+  return shooting_time;
 }
 
 //water_stop_time 반환
 exports.get_water_stop_time = function(){
-  return get_field_id;
+  return water_stop_time;
 }
