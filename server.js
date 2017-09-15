@@ -22,16 +22,13 @@
      if( result == "") {
        console.log("undefined setting");
        console.log("using default setting");
-
-            module_start();
      } else {
        console.log("defining new setting");
        water_stop_time = result[0].water_stop_time;
        shooting_time = result[0].shooting_time;
-
-            module_start();
      }
 
+     module_start();
   });
 
 //모듈 시작

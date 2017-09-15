@@ -25,8 +25,6 @@ var shooting_time;
 
 var camera = new RaspiCam(option);
 
-
-
 var option = {
     width: 600,
     height: 420,
@@ -36,15 +34,12 @@ var option = {
     output: "./images/image_%03d.jpg", // image_000001.jpg, image_000002.jpg,... moment().format('YYYYMMDDHHmmss') + ".jpg"
     q: 50,
     timeout: 0, // take a total of 4 pictures over 12 seconds , 0 일경우 무제한 촬영
-    timelapse: 1000*60*shooting_time, //1시간 단위로 촬영
+    timelapse: 1000*60, //1시간 단위로 촬영
     nopreview: true,
     th: '0:0:0'
 };
 
-
-
 //소켓통신으로 이미지 파일을 서버로 전송
-
 var temp = {};
 
 socket.on('connect', function() {
@@ -70,7 +65,6 @@ camera.on("start", function(err, timestamp) {
 //카메라 촬영
 camera.on("read", function(err, timestamp, filename) {
     console.log("timelapse image captured with filename: " + filename);
-
     delivery.send({
         name: filename,
         path: './images/' + filename,
