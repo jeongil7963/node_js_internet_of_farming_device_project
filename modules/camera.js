@@ -86,6 +86,7 @@ camera.on("stop", function(err, timestamp) {
 });
 
 camera.set_config = function (id, shoot) {
+  console("set_config execution");
   filed_id = id;
   shooting_time = shoot;
 }
