@@ -23,8 +23,6 @@ var config = require('../config.json');
 var field_id;
 var shooting_time;
 
-var camera = new RaspiCam(option);
-
 var option = {
     width: 600,
     height: 420,
@@ -38,6 +36,8 @@ var option = {
     nopreview: true,
     th: '0:0:0'
 };
+
+var camera = new RaspiCam(option);
 
 //소켓통신으로 이미지 파일을 서버로 전송
 var temp = {};
