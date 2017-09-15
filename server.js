@@ -33,25 +33,9 @@
 
 //모듈 시작
 function module_start() {
+  controller.set_config(field_id, shooting_time);
   controller.start();
   //var watering = require("./modules/watering"); //아두이노
   //var arduino = require("./modules/moisture"); //아두이노
 
 }
-
-//filed_id 반환
-setting.get_field_id = function(){
-  return filed_id;
-}
-
-//shooting_time 반환
-setting.get_shooting_time = function(){
-  return shooting_time;
-}
-
-//water_stop_time 반환
-setting.get_water_stop_time = function(){
-  return water_stop_time;
-}
-
-module.exports = setting;

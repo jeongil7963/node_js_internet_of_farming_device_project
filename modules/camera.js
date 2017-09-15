@@ -18,11 +18,10 @@ var mqtt = require('mqtt'); //mqtt 모듈
 var client = mqtt.connect('mqtt://13.124.28.87'); //mqtt 서버 접속
 var http = require('http'); //http socket
 var config = require('../config.json');
-var setting = require('../server');
 
-var filed_id = setting.get_field_id();
-var shooting_time = setting.get_shooting_time();
-var water_stop_time = setting.get_water_stop_time();
+var filed_id;
+var shooting_time;
+
 
 var option = {
     width: 600,
@@ -76,7 +75,6 @@ camera.on("read", function(err, timestamp, filename) {
 
 });
 
-
 //모듈 종료
 camera.on("exit", function(timestamp) {
     console.log("timelapse child process has exited");
@@ -87,6 +85,9 @@ camera.on("stop", function(err, timestamp) {
     console.log("timelapse child process has been stopped at " + timestamp);
 });
 
-
+camera.set_config = function (id, shoot) {
+  filed_id = id;
+  shooting_time = shoot;
+}
 
 module.exports = camera;
