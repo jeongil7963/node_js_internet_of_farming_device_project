@@ -19,9 +19,18 @@ var client = mqtt.connect('mqtt://13.124.28.87'); //mqtt 서버 접속
 var http = require('http'); //http socket
 var config = require('../config.json');
 
+//setting 변수
 var field_id;
 var shooting_time;
 
+//setting 변수 설정
+camera.set_config = function (id, shoot) {
+  field_id = id;
+  shooting_time = shoot;
+  console.log("set_config execution");
+  console.log("field_id " + field_id);
+  console.log("shooting_time " + shooting_time);
+}
 
 var option = {
     width: 600,
@@ -84,13 +93,5 @@ camera.on("exit", function(timestamp) {
 camera.on("stop", function(err, timestamp) {
     console.log("timelapse child process has been stopped at " + timestamp);
 });
-
-camera.set_config = function (id, shoot) {
-  field_id = id;
-  shooting_time = shoot;
-  console.log("set_config execution");
-  console.log("field_id " + field_id);
-  console.log("shooting_time " + shooting_time);
-}
 
 module.exports = camera;
