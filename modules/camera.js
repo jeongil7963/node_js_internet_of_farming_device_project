@@ -30,7 +30,7 @@ camera.set_config = function (id, shoot) {
   console.log("set_config execution");
   console.log("field_id " + field_id);
   console.log("shooting_time " + shooting_time);
-}
+};
 
 var option = {
     width: 600,
