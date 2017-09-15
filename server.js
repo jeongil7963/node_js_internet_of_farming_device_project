@@ -11,6 +11,9 @@
  var connection = mysql_dbc.init();
  mysql_dbc.test_open(connection);
 
+//카메라 모듈 선언
+ var controller = require('./modules/camera');
+
 //db에서 설정 값 가져오기
  var stmt = 'SELECT * from device_setting where field_id = ' + field_id;
  connection.query(stmt, function (err, result) {
@@ -24,11 +27,14 @@
        water_stop_time = result[0].water_stop_time;
        shooting_time = result[0].shooting_time;
      }
+
+     module_start();
   });
 
+//모듈 시작
+function module_start() {
+  controller.start();
+}
 
-//카메라 모듈 시작
-//var controller = require('./modules/camera');
-//controller.start();
 //var watering = require("./modules/watering"); //아두이노
 //var arduino = require("./modules/moisture"); //아두이노
