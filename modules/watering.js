@@ -1,13 +1,13 @@
 var mqtt = require('mqtt'); //mqtt 모듈
 var client = mqtt.connect('mqtt://13.124.28.87'); //mqtt 서버 접속
 var config2 = require('../config.json');
-var deivce_num = config2.channel;
+var deivce_num = config.channel;
 var GPIO = require('onoff').Gpio;
 var onoffcontroller = new GPIO(21, 'out');
 
 //MQTT pub/sub
 client.on('connect', function() {
-    client.subscribe('/' + config2.channel + '/onoff');
+    client.subscribe('/' + config.channel + '/onoff');
 });
 
 //callback
