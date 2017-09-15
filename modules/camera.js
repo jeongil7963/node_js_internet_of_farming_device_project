@@ -25,14 +25,7 @@ var shooting_time;
 
 var camera = new RaspiCam(option);
 
-//setting 변수 설정
-camera.set_config = function (id, shoot) {
-  field_id = id;
-  shooting_time = shoot;
-  console.log("set_config execution");
-  console.log("field_id " + field_id);
-  console.log("shooting_time " + shooting_time);
-};
+
 
 var option = {
     width: 600,
@@ -95,5 +88,14 @@ camera.on("exit", function(timestamp) {
 camera.on("stop", function(err, timestamp) {
     console.log("timelapse child process has been stopped at " + timestamp);
 });
+
+//setting 변수 설정
+camera.set_config = function (id, shoot) {
+  field_id = id;
+  shooting_time = shoot;
+  console.log("set_config execution");
+  console.log("field_id " + field_id);
+  console.log("shooting_time " + shooting_time);
+};
 
 module.exports = camera;
