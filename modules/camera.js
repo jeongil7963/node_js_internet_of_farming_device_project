@@ -32,12 +32,12 @@ var option = {
     output: "./images/image_%03d.jpg", // image_000001.jpg, image_000002.jpg,... moment().format('YYYYMMDDHHmmss') + ".jpg"
     q: 50,
     timeout: 0, // take a total of 4 pictures over 12 seconds , 0 일경우 무제한 촬영
-    timelapse: 1000*60, //1시간 단위로 촬영
+    timelapse: 1000*60*shooting_time, //1시간 단위로 촬영
     nopreview: true,
     th: '0:0:0'
 };
 
-var camera = new RaspiCam(option);
+var camera;
 
 //소켓통신으로 이미지 파일을 서버로 전송
 var temp = {};
@@ -90,6 +90,7 @@ camera.set_config = function (id, shoot) {
   console.log("set_config execution");
   console.log("field_id " + field_id);
   console.log("shooting_time " + shooting_time);
+  camera = new RaspiCam(option);
 };
 
 module.exports = camera;
