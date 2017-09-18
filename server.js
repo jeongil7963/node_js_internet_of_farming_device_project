@@ -30,10 +30,7 @@
 
 //모듈 시작
 function module_start() {
-  //controller.set_config(field_id, shooting_time);
-  //controller.start();
-  //var watering = require("./modules/watering"); //아두이노
-  //var arduino = require("./modules/moisture"); //아두이노
+  camera.start();
 }
 
 //카메라 모듈//
