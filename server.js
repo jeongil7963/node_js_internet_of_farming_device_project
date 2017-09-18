@@ -100,7 +100,7 @@ camera.on("read", function(err, timestamp, filename) {
     delivery.send({
         name: filename,
         path: './images/' + filename,
-        params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
+        params: { channel: config.channel, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
     });
 });
 
