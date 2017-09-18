@@ -62,7 +62,7 @@ var option = {
     th: '0:0:0'
 };
 
-var camera = new RaspiCam(option);;
+var camera = new RaspiCam(option);
 
 //소켓통신으로 이미지 파일을 서버로 전송
 var temp = {};
