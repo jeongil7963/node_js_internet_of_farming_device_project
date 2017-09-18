@@ -77,7 +77,7 @@ var temp = {};
 
 socket.on('connect', function() {
     console.log("Sockets connected222");
-    delivery = dl.listen(socket);
+    var delivery = dl.listen(socket);
     //delivery 패키지 이용
     delivery.connect();
 
@@ -86,7 +86,7 @@ socket.on('connect', function() {
             console.log('File sent successfully!');
         });
     });
-});
+
 
 //모듈 시작
 camera.on("start", function(err, timestamp) {
@@ -112,6 +112,9 @@ camera.on("exit", function(timestamp) {
 //모듈 정지
 camera.on("stop", function(err, timestamp) {
     console.log("timelapse child process has been stopped at " + timestamp);
+});
+
+
 });
 
 /*
