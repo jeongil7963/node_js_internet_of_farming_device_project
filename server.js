@@ -36,7 +36,7 @@ function module_start() {
   //var arduino = require("./modules/moisture"); //아두이노
 }
 
-///////////////////////////** 카메라 모듈///
+//카메라 모듈//
 var RaspiCam = require("raspicam"); //카메라 모듈
 var socket = require('socket.io-client')('http://13.124.28.87:5001'); //소켓서버에 연결
 var dl = require('delivery'); //파일 전송 모듈
@@ -44,6 +44,20 @@ var moment = require('moment');
 var mqtt = require('mqtt'); //mqtt 모듈
 var client = mqtt.connect('mqtt://13.124.28.87'); //mqtt 서버 접속
 var http = require('http'); //http socket
+//관수 모듈//
+var GPIO = require('onoff').Gpio;
+var onoffcontroller = new GPIO(21, 'out');
+//수분 측정 모듈//
+var SerialPort = require('serialport'); //아두이노와 시리얼 통신할 수 있는 모듈
+var parsers = SerialPort.parsers;
+var parser = new parsers.Readline({
+    delimiter: '\r\n'
+});
+//라즈베리파이와 연결된 디바이스 주소
+var port = new SerialPort('/dev/ttyACM0', {
+    baudrate: 9600
+});
+
 
 //setting 변수
 var field_id;
@@ -119,12 +133,7 @@ camera.set_config = function (id, shoot) {
 
 
 //--------------------------//watering
-var mqtt = require('mqtt'); //mqtt 모듈
-var client = mqtt.connect('mqtt://13.124.28.87'); //mqtt 서버 접속
-var config2 = require('./config.json');
-var deivce_num = config.channel;
-var GPIO = require('onoff').Gpio;
-var onoffcontroller = new GPIO(21, 'out');
+
 
 //MQTT pub/sub
 client.on('connect', function() {
@@ -154,20 +163,6 @@ client.on('message', function(topic, message) {
 //module.exports = client;
 //---------------------------------
 //--------------------------//moisture
-var SerialPort = require('serialport'); //아두이노와 시리얼 통신할 수 있는 모듈
-var mqtt = require('mqtt'); //mqtt 모듈
-var client = mqtt.connect('mqtt://13.124.28.87');  //mqtt 서버 접속
-var config = require('./config.json');
-var parsers = SerialPort.parsers;
-var parser = new parsers.Readline({
-    delimiter: '\r\n'
-});
-var http = require('http');
-var deivce_num = config.channel;
-//라즈베리파이와 연결된 디바이스 주소
-var port = new SerialPort('/dev/ttyACM0', {
-    baudrate: 9600
-});
 
 port.pipe(parser);
 
