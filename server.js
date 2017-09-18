@@ -36,6 +36,7 @@ function module_start() {
   //var arduino = require("./modules/moisture"); //아두이노
 }
 
+///////////////////////////** 카메라 모듈///
 var RaspiCam = require("raspicam"); //카메라 모듈
 var socket = require('socket.io-client')('http://13.124.28.87:5001'); //소켓서버에 연결
 var dl = require('delivery'); //파일 전송 모듈
@@ -120,7 +121,7 @@ camera.set_config = function (id, shoot) {
 //--------------------------//watering
 var mqtt = require('mqtt'); //mqtt 모듈
 var client = mqtt.connect('mqtt://13.124.28.87'); //mqtt 서버 접속
-var config2 = require('../config.json');
+var config2 = require('./config.json');
 var deivce_num = config.channel;
 var GPIO = require('onoff').Gpio;
 var onoffcontroller = new GPIO(21, 'out');
@@ -150,7 +151,7 @@ client.on('message', function(topic, message) {
     //port.write(message.toString(), function(err) {});
 });
 
-module.exports = client;
+//module.exports = client;
 //---------------------------------
 //--------------------------//moisture
 var SerialPort = require('serialport'); //아두이노와 시리얼 통신할 수 있는 모듈
@@ -202,4 +203,4 @@ parser.on('data', function (data) {
     });
 });
 
-module.exports = port;
+//module.exports = port;
