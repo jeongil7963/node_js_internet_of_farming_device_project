@@ -78,7 +78,7 @@ var temp = {};
 
 socket.on('connect', function() {
     console.log("Sockets connected222");
-    delivery = dl.listen(socket);
+    var delivery = dl.listen(socket);
     //delivery 패키지 이용
     delivery.connect();
     delivery.on('delivery.connect', function(delivery) {
