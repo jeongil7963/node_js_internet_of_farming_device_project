@@ -75,20 +75,7 @@ var camera = new RaspiCam(option);
 //소켓통신으로 이미지 파일을 서버로 전송
 var temp = {};
 
-socket.on('connect', function() {
-    console.log("Sockets connected222");
-    var delivery = dl.listen(socket);
-    //delivery 패키지 이용
-    delivery.connect();
-
-    delivery.on('delivery.connect', function(delivery) {
-        delivery.on('send.success', function(file) {
-            console.log('File sent successfully!');
-        });
-    });
-
-
-//모듈 시작
+    //모듈 시작
 camera.on("start", function(err, timestamp) {
     console.log("timelapse started at " + timestamp);
 });
@@ -96,11 +83,24 @@ camera.on("start", function(err, timestamp) {
 //카메라 촬영
 camera.on("read", function(err, timestamp, filename) {
     console.log("timelapse image captured with filename: " + filename);
-   /* delivery.send({
-        name: filename,
-        path: './images/' + filename,
-        params: { channel: config.channel, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
-    });*/
+    socket.on('connect', function() {
+        console.log("Sockets connected222");
+        var delivery = dl.listen(socket);
+        //delivery 패키지 이용
+        delivery.connect();
+    
+        delivery.on('delivery.connect', function(delivery) {
+            delivery.on('send.success', function(file) {
+                console.log('File sent successfully!');
+                socket.disconnect();
+            });
+        });
+        delivery.send({
+            name: filename,
+            path: './images/' + filename,
+            params: { channel: config.channel, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
+        });
+    });
     console.log("delivery send");
 });
 
@@ -114,8 +114,6 @@ camera.on("stop", function(err, timestamp) {
     console.log("timelapse child process has been stopped at " + timestamp);
 });
 
-
-});
 
 /*
 //--------------관수-----------------//
