@@ -70,9 +70,8 @@ var temp = {};
 socket.on('connect', function() {
     console.log("Sockets connected");
     //delivery 패키지 이용
-    delivery = dl.listen(socket);
+    var delivery = dl.listen(socket);
     delivery.connect();
-
     delivery.on('delivery.connect', function(delivery) {
 
         delivery.on('send.success', function(file) {
@@ -116,3 +115,91 @@ camera.set_config = function (id, shoot) {
   console.log("field_id " + field_id);
   console.log("shooting_time " + shooting_time);
 };
+
+
+//--------------------------//watering
+var mqtt = require('mqtt'); //mqtt 모듈
+var client = mqtt.connect('mqtt://13.124.28.87'); //mqtt 서버 접속
+var config2 = require('../config.json');
+var deivce_num = config.channel;
+var GPIO = require('onoff').Gpio;
+var onoffcontroller = new GPIO(21, 'out');
+
+//MQTT pub/sub
+client.on('connect', function() {
+    client.subscribe('/' + config.channel + '/onoff');
+});
+
+//callback
+client.on('message', function(topic, message) {
+    // message is Buffer
+    console.log(message.toString());
+    if (message.toString() === '1') {
+	    console.log('watering on');
+        onoffcontroller.writeSync(1);
+    } else if (message.toString() === '0') {
+	    console.log('watering off');
+        onoffcontroller.writeSync(0);
+    } else {
+        console.log('watering error ');
+        var error_time = new Date.toString();
+        var get_message = message.toString();
+        var error_temp = { error_time: get_message };
+        temp.add(error_temp);
+    }
+    //port.write(message.toString(), function(err) {});
+});
+
+module.exports = client;
+//---------------------------------
+//--------------------------//moisture
+var SerialPort = require('serialport'); //아두이노와 시리얼 통신할 수 있는 모듈
+var mqtt = require('mqtt'); //mqtt 모듈
+var client = mqtt.connect('mqtt://13.124.28.87');  //mqtt 서버 접속
+var config = require('../config.json');
+var parsers = SerialPort.parsers;
+var parser = new parsers.Readline({
+    delimiter: '\r\n'
+});
+var http = require('http');
+var deivce_num = config.channel;
+//라즈베리파이와 연결된 디바이스 주소
+var port = new SerialPort('/dev/ttyACM0', {
+    baudrate: 9600
+});
+
+port.pipe(parser);
+
+//포트 열기
+port.on('open', function () {
+    console.log('port open');
+});
+
+// open errors will be emitted as an error event
+port.on('error', function (err) {
+    console.log('Error: ', err.message);
+});
+
+parser.on('data', function (data) {
+    console.log('Read and Send Data : ' + data);
+    var sensorObj = JSON.parse(data.toString()); // json 형식 data를 객체형식으로 저장
+    var insert_url = 'http://13.124.28.87:8080/test/insert?field=' + deivce_num + '&value=' + sensorObj.soil
+    http.get(insert_url, (resp) => {
+        let data = '';
+
+        // A chunk of data has been recieved.
+        resp.on('data', (chunk) => {
+            data += chunk;
+        });
+
+        // The whole response has been received. Print out the result.
+        resp.on('end', () => {
+            //console.log(JSON.parse(data).explanation);
+        });
+
+    }).on("error", (err) => {
+        console.log("Error: " + err.message);
+    });
+});
+
+module.exports = port;
