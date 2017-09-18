@@ -19,12 +19,13 @@
      if( result == "") {
        console.log("undefined setting");
        console.log("using default setting");
+       connection.release();
      } else {
        console.log("defining new setting");
        water_stop_time = result[0].water_stop_time;
        shooting_time = result[0].shooting_time;
+       connection.release();
      }
-
      module_start();
   });
 
