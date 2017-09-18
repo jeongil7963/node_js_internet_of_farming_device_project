@@ -25,12 +25,12 @@
        shooting_time = result[0].shooting_time;
      }
      module_start();
-     connection.end();
   });
 
 //모듈 시작
 function module_start() {
-  camera.start();
+    connection.end();
+    camera.start();
 }
 
 //카메라 모듈//
