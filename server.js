@@ -56,6 +56,8 @@ var port = new SerialPort('/dev/ttyACM0', {
     baudrate: 9600
 });
 
+
+//--------------카메라-----------------//
 var option = {
     width: 600,
     height: 420,
@@ -112,8 +114,8 @@ camera.on("stop", function(err, timestamp) {
     console.log("timelapse child process has been stopped at " + timestamp);
 });
 
-//--------------------------//watering
 
+//--------------관수-----------------//
 //MQTT pub/sub
 client.on('connect', function() {
     client.subscribe('/' + field_id + '/onoff');
@@ -139,10 +141,7 @@ client.on('message', function(topic, message) {
     //port.write(message.toString(), function(err) {});
 });
 
-//module.exports = client;
-//---------------------------------
-//--------------------------//moisture
-
+//--------------수분측정-----------------//
 port.pipe(parser);
 
 //포트 열기
