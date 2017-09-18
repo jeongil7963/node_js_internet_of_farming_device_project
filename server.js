@@ -25,7 +25,6 @@
        shooting_time = result[0].shooting_time;
      }
      connection.end();
-     module_start();
   });
 
 //모듈 시작
@@ -82,6 +81,7 @@ socket.on('connect', function() {
     delivery = dl.listen(socket);
     //delivery 패키지 이용
     delivery.connect();
+
     delivery.on('delivery.connect', function(delivery) {
         delivery.on('send.success', function(file) {
             console.log('File sent successfully!');
@@ -178,3 +178,4 @@ parser.on('data', function (data) {
 });
 
 //module.exports = port;
+module_start();
