@@ -157,7 +157,7 @@ client.on('message', function(topic, message) {
 var SerialPort = require('serialport'); //아두이노와 시리얼 통신할 수 있는 모듈
 var mqtt = require('mqtt'); //mqtt 모듈
 var client = mqtt.connect('mqtt://13.124.28.87');  //mqtt 서버 접속
-var config = require('../config.json');
+var config = require('./config.json');
 var parsers = SerialPort.parsers;
 var parser = new parsers.Readline({
     delimiter: '\r\n'
