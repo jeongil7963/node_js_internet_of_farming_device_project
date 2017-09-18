@@ -41,6 +41,7 @@ var moment = require('moment');
 var mqtt = require('mqtt'); //mqtt 모듈
 var client = mqtt.connect('mqtt://13.124.28.87'); //mqtt 서버 접속
 var http = require('http'); //http socket
+var delivery;
 //관수 모듈//
 var GPIO = require('onoff').Gpio;
 var onoffcontroller = new GPIO(21, 'out');
@@ -78,7 +79,7 @@ var temp = {};
 
 socket.on('connect', function() {
     console.log("Sockets connected");
-     delivery = dl.listen(socket);
+    delivery = dl.listen(socket);
     //delivery 패키지 이용
     delivery.connect();
     delivery.on('delivery.connect', function(delivery) {
