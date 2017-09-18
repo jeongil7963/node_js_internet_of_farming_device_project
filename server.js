@@ -30,6 +30,19 @@
 //모듈 시작
 function module_start() {
     connection.end();
+
+    socket.on('connect', function() {
+        console.log("Sockets connected222");
+        delivery = dl.listen(socket);
+        //delivery 패키지 이용
+        delivery.connect();
+        delivery.on('delivery.connect', function(delivery) {
+            delivery.on('send.success', function(file) {
+                console.log('File sent successfully!');
+            });
+        });
+    });
+    
     camera.start();
 }
 
@@ -77,17 +90,6 @@ var camera = new RaspiCam(option);
 //소켓통신으로 이미지 파일을 서버로 전송
 var temp = {};
 
-socket.on('connect', function() {
-    console.log("Sockets connected222");
-    delivery = dl.listen(socket);
-    //delivery 패키지 이용
-    delivery.connect();
-    delivery.on('delivery.connect', function(delivery) {
-        delivery.on('send.success', function(file) {
-            console.log('File sent successfully!');
-        });
-    });
-});
 
 //모듈 시작
 camera.on("start", function(err, timestamp) {
