@@ -102,6 +102,7 @@ camera.on("read", function(err, timestamp, filename) {
         path: './images/' + filename,
         params: { channel: config.channel, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
     });
+    console.log("delivery send");
 });
 
 //모듈 종료
