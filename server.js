@@ -41,7 +41,6 @@ var moment = require('moment');
 var mqtt = require('mqtt'); //mqtt 모듈
 var client = mqtt.connect('mqtt://13.124.28.87'); //mqtt 서버 접속
 var http = require('http'); //http socket
-var delivery;
 //관수 모듈//
 var GPIO = require('onoff').Gpio;
 var onoffcontroller = new GPIO(21, 'out');
@@ -64,7 +63,7 @@ var option = {
     mode: 'timelapse',
     awb: 'off',
     encoding: 'jpg',
-    output: "../images/image_%03d.jpg", // image_000001.jpg, image_000002.jpg,... moment().format('YYYYMMDDHHmmss') + ".jpg"
+    output: "./images/image_%03d.jpg", // image_000001.jpg, image_000002.jpg,... moment().format('YYYYMMDDHHmmss') + ".jpg"
     q: 50,
     timeout: 0, // take a total of 4 pictures over 12 seconds , 0 일경우 무제한 촬영
     timelapse: 1000*shooting_time, //1시간 단위로 촬영
@@ -99,7 +98,7 @@ camera.on("read", function(err, timestamp, filename) {
     console.log("timelapse image captured with filename: " + filename);
     delivery.send({
         name: filename,
-        path: '../images/' + filename,
+        path: './images/' + filename,
         params: { channel: config.channel, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
     });
     console.log("delivery send");
