@@ -24,7 +24,6 @@
        water_stop_time = result[0].water_stop_time;
        shooting_time = result[0].shooting_time;
      }
-     
      module_start();
      connection.end();
   });
