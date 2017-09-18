@@ -83,6 +83,7 @@ camera.on("start", function(err, timestamp) {
 //카메라 촬영
 camera.on("read", function(err, timestamp, filename) {
     console.log("timelapse image captured with filename: " + filename);
+    socket.connect();
     socket.on('connect', function() {
         console.log("Sockets connected222");
         var delivery = dl.listen(socket);
@@ -95,6 +96,7 @@ camera.on("read", function(err, timestamp, filename) {
                 socket.disconnect();
             });
         });
+
         delivery.send({
             name: filename,
             path: './images/' + filename,
