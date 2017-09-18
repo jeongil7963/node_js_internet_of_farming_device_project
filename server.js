@@ -59,11 +59,6 @@ var port = new SerialPort('/dev/ttyACM0', {
     baudrate: 9600
 });
 
-
-//setting 변수
-var field_id;
-var shooting_time;
-
 var option = {
     width: 600,
     height: 420,
@@ -88,12 +83,10 @@ socket.on('connect', function() {
     //delivery 패키지 이용
     delivery.connect();
     delivery.on('delivery.connect', function(delivery) {
-
         delivery.on('send.success', function(file) {
             console.log('File sent successfully!');
         });
     });
-
 });
 
 //모듈 시작
@@ -107,7 +100,7 @@ camera.on("read", function(err, timestamp, filename) {
     delivery.send({
         name: filename,
         path: './images/' + filename,
-        params: { channel: config.channel, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
+        params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
     });
 
 });
@@ -122,22 +115,11 @@ camera.on("stop", function(err, timestamp) {
     console.log("timelapse child process has been stopped at " + timestamp);
 });
 
-//setting 변수 설정
-camera.set_config = function (id, shoot) {
-  field_id = id;
-  shooting_time = shoot;
-  console.log("set_config execution");
-  console.log("field_id " + field_id);
-  console.log("shooting_time " + shooting_time);
-};
-
-
 //--------------------------//watering
-
 
 //MQTT pub/sub
 client.on('connect', function() {
-    client.subscribe('/' + config.channel + '/onoff');
+    client.subscribe('/' + field_id + '/onoff');
 });
 
 //callback
