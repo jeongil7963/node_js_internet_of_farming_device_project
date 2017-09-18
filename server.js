@@ -19,14 +19,13 @@
      if( result == "") {
        console.log("undefined setting");
        console.log("using default setting");
-       mysql_dbc.release();
      } else {
        console.log("defining new setting");
        water_stop_time = result[0].water_stop_time;
        shooting_time = result[0].shooting_time;
-       mysql_dbc.release();
      }
      module_start();
+     mysql_dbc.release();
   });
 
 //모듈 시작
