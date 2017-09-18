@@ -25,7 +25,7 @@
        shooting_time = result[0].shooting_time;
      }
      module_start();
-     mysql_dbc.release();
+     connection.end();
   });
 
 //모듈 시작
