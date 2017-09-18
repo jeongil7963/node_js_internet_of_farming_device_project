@@ -24,8 +24,9 @@
        water_stop_time = result[0].water_stop_time;
        shooting_time = result[0].shooting_time;
      }
-     connection.end();
+     
      module_start();
+     connection.end();
   });
 
 //모듈 시작
