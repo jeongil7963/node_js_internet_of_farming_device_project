@@ -24,19 +24,18 @@
        water_stop_time = result[0].water_stop_time;
        shooting_time = result[0].shooting_time;
      }
+     connection.end();
      module_start();
   });
 
 //모듈 시작
 function module_start() {
-    connection.end();
-    socket = require('socket.io-client')('http://13.124.28.87:5001');
     camera.start();
 }
 
 //카메라 모듈//
 var RaspiCam = require("raspicam"); //카메라 모듈
-var socket; //소켓서버에 연결
+var socket = require('socket.io-client')('http://13.124.28.87:5001'); //소켓서버에 연결
 var dl = require('delivery'); //파일 전송 모듈
 var moment = require('moment');
 var mqtt = require('mqtt'); //mqtt 모듈
