@@ -149,19 +149,20 @@ client.on('message', function(topic, message) {
 port.pipe(parser);
 
 //포트 열기
-port.on('open', function () {
-    console.log('port open');
+port.on('open', function() {
+    console.log('1 written');
 });
 
 // open errors will be emitted as an error event
-port.on('error', function (err) {
+port.on('error', function(err) {
     console.log('Error: ', err.message);
 });
 
-parser.on('data', function (data) {
+parser.on('data', function(data) {
     console.log('Read and Send Data : ' + data);
-    var sensorObj = JSON.parse(data.toString()); // json 형식 data를 객체형식으로 저장
-    var insert_url = 'http://13.124.28.87:8080/test/insert?field=' + field_id + '&value=' + sensorObj.soil
+
+    var sensorObj = data.toString(); // json 형식 data를 객체형식으로 저장
+    var insert_url = 'http://13.124.28.87:8080/test/insert?field=' + deivce_num + '&value=' + sensorObj;
     http.get(insert_url, (resp) => {
         let data = '';
 
