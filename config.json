@@ -1,4 +1,4 @@
-{ "channel": 5,
-  "water_stop_time" : 5,
-  "shooting_time" : 5
+{ "channel": 6,
+  "water_stop_time" : 1,
+  "shooting_time" : 60
 }

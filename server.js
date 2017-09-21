@@ -66,7 +66,7 @@ var option = {
     output: "./images/image_%03d.jpg", // image_000001.jpg, image_000002.jpg,... moment().format('YYYYMMDDHHmmss') + ".jpg"
     q: 50,
     timeout: 0, // take a total of 4 pictures over 12 seconds , 0 일경우 무제한 촬영
-    timelapse: 1000*shooting_time, //1시간 단위로 촬영
+    timelapse: 1000*60*shooting_time, //1시간 단위로 촬영
     nopreview: true,
     th: '0:0:0'
 };
@@ -104,7 +104,7 @@ camera.on("read", function(err, timestamp, filename) {
     delivery.send({
         name: filename,
         path: './images/' + filename,
-        params: { channel: config.channel, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
+        params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
     });
 
 });
@@ -161,7 +161,7 @@ port.on('error', function (err) {
 parser.on('data', function (data) {
     console.log('Read and Send Data : ' + data);
     var sensorObj = JSON.parse(data.toString()); // json 형식 data를 객체형식으로 저장
-    var insert_url = 'http://13.124.28.87:8080/test/insert?field=' + deivce_num + '&value=' + sensorObj.soil
+    var insert_url = 'http://13.124.28.87:8080/test/insert?field=' + field_id + '&value=' + sensorObj.soil
     http.get(insert_url, (resp) => {
         let data = '';
 
