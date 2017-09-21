@@ -162,7 +162,7 @@ parser.on('data', function(data) {
     console.log('Read and Send Data : ' + data);
 
     var sensorObj = data.toString(); // json 형식 data를 객체형식으로 저장
-    var insert_url = 'http://13.124.28.87:8080/test/insert?field=' + deivce_num + '&value=' + sensorObj;
+    var insert_url = 'http://13.124.28.87:8080/test/insert?field=' + field_id + '&value=' + sensorObj;
     http.get(insert_url, (resp) => {
         let data = '';
 
