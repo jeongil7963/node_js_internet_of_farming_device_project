@@ -33,6 +33,8 @@ function module_start() {
     camera.start();
 }
 
+//설정 소켓 모듈
+var socket2 = require('socket.io-client')('http://13.124.28.87:3000');
 //카메라 모듈//
 var RaspiCam = require("raspicam"); //카메라 모듈
 var socket = require('socket.io-client')('http://13.124.28.87:5001'); //소켓서버에 연결
@@ -181,3 +183,18 @@ parser.on('data', function(data) {
         console.log("Error: " + err.message);
     });
 });
+
+
+//----------------설정 버튼----------------//
+socket2.on('connect', function(){
+    console.log('socket2 connected');
+});
+
+socket2.on('chat', function(data){
+    console.log('socket2 : ' + data);
+});
+
+socket2.on('disconnect', function(){
+    console.log('socket2 disconnected');
+});
+
