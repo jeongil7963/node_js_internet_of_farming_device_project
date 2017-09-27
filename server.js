@@ -196,7 +196,7 @@ socket2.on(field_id, function(data){
     console.log('socket2 : ' + data);
     camera.stop();
     shooting_time = 1;
-    camera.set("timelapse", 60*60*shooting_time);
+    camera.set("timelapse", 1000*shooting_time);
     camera.start();
 });
 
