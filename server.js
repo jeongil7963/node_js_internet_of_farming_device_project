@@ -31,7 +31,7 @@
 //모듈 시작
 function module_start() {
     camera.start();
-}
+};
 
 //설정 소켓 모듈
 var socket2 = require('socket.io-client')('http://13.124.28.87:3000');
