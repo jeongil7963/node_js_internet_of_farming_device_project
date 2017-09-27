@@ -30,6 +30,9 @@
 
 //모듈 시작
 function module_start() {
+    setTimeout(() => {
+        console.log('timeout 1 second');
+      }, 1000);
     camera.start();
 };
 
