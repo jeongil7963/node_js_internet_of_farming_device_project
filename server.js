@@ -191,8 +191,7 @@ socket2.on('connect', function(){
     console.log('socket2 connected');
 });
 
-socket2.on(6, function(data){
-    console.log(socket2.id);
+socket2.on(field_id, function(data){
     console.log('socket2 : ' + data);
 });
 
