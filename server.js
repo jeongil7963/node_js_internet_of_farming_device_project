@@ -195,7 +195,7 @@ socket2.on(field_id, function(data){
     rst = camera.stop();
     console.log('socket2 : ' + data);
     camera.set("timelapse",1000);
-    console.log("rst" = rst);
+    console.log("rst : " +  rst);
 });
 
 socket2.on('disconnect', function(){
