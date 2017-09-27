@@ -33,13 +33,6 @@ function module_start() {
     camera.start();
 }
 
-function module_restart() {
-    camera.stop();
-    camera.set("timelapse", 1000*60);
-    module_start();
-
-}
-
 //설정 소켓 모듈
 var socket2 = require('socket.io-client')('http://13.124.28.87:3000');
 //카메라 모듈//
@@ -199,8 +192,9 @@ socket2.on('connect', function(){
 });
 
 socket2.on(field_id, function(data){
+    camera.stop();
     console.log('socket2 : ' + data);
-    module_restart();
+    module_start();
 });
 
 socket2.on('disconnect', function(){
