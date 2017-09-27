@@ -186,6 +186,8 @@ parser.on('data', function(data) {
 
 
 //----------------설정 버튼----------------//
+socket2.join(field_id);
+
 socket2.on('connect', function(){
     console.log('socket2 connected');
 });
