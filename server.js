@@ -192,7 +192,10 @@ socket2.on('connect', function(){
 });
 
 socket2.on(field_id, function(data){
+
     console.log('socket2 : ' + data);
+    camera.stop();
+    module_start();
 });
 
 socket2.on('disconnect', function(){
