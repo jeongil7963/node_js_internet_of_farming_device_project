@@ -29,6 +29,7 @@
   });
 
   function rederection(){
+    connection = mysql_dbc.init(); 
     connection.query(stmt, function (err, result) {
         console.log(result);
         if( result == "") {
