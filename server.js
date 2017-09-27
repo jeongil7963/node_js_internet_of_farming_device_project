@@ -191,6 +191,7 @@ socket2.on('connect', function(){
 });
 
 socket2.on('chat', function(data){
+    console.log(socket2.id);
     console.log('socket2 : ' + data);
 });
 
