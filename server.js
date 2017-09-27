@@ -28,12 +28,29 @@
      module_start();
   });
 
+  function rederection(){
+    connection.query(stmt, function (err, result) {
+        console.log(result);
+        if( result == "") {
+          console.log("undefined setting");
+          console.log("using default setting");
+        } else {
+          console.log("defining new setting");
+          water_stop_time = result[0].water_stop_time;
+          shooting_time = result[0].shooting_time;
+        }
+        connection.end();
+        camera.set("timelapse",3000);
+        module_start();
+     });
+  }
+
 //모듈 시작
 function module_start() {
     setTimeout(() => {
         console.log('timeout 1 second');
         camera.start();
-      }, 1000);
+      }, 500);
 };
 
 //설정 소켓 모듈
@@ -197,8 +214,7 @@ socket2.on('connect', function(){
 socket2.on(field_id, function(data){
     console.log('web_socket : ' + data);
     camera.stop();
-    camera.set("timelapse",1000);
-    module_start();
+    rederection();
 });
 
 socket2.on('disconnect', function(){
