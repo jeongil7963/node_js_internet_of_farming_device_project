@@ -69,7 +69,7 @@ var option = {
     output: "./images/image_%03d.jpg", // image_000001.jpg, image_000002.jpg,... moment().format('YYYYMMDDHHmmss') + ".jpg"
     q: 50,
     timeout: 0, // take a total of 4 pictures over 12 seconds , 0 일경우 무제한 촬영
-    timelapse: 1000*60*shooting_time, //1시간 단위로 촬영
+    timelapse: 1000*60, //1시간 단위로 촬영
     nopreview: true,
     th: '0:0:0'
 };
@@ -192,9 +192,10 @@ socket2.on('connect', function(){
 });
 
 socket2.on(field_id, function(data){
-    camera.stop();
+    rst = camera.stop();
     console.log('socket2 : ' + data);
-    module_start();
+    camera.set("timelapse",1000);
+    console.log("rst" = rst);
 });
 
 socket2.on('disconnect', function(){
