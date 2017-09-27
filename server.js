@@ -32,8 +32,8 @@
 function module_start() {
     setTimeout(() => {
         console.log('timeout 1 second');
+        camera.start();
       }, 1000);
-    camera.start();
 };
 
 //설정 소켓 모듈
