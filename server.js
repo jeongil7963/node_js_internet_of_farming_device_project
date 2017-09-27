@@ -186,13 +186,12 @@ parser.on('data', function(data) {
 
 
 //----------------설정 버튼----------------//
-socket2.join(field_id);
 
 socket2.on('connect', function(){
     console.log('socket2 connected');
 });
 
-socket2.on('chat', function(data){
+socket2.on('6', function(data){
     console.log(socket2.id);
     console.log('socket2 : ' + data);
 });
