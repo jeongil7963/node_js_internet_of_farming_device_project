@@ -2,7 +2,7 @@
 
  //confi.json 에서 기본 설정값을 가져옴
  var config = require('./config.json');
- var timeInMs = Date.now();
+ var timeInMs;
  var field_id = config.channel;
  var water_stop_time = config.water_stop_time;
  var shooting_time = config.shooting_time;
@@ -231,25 +231,36 @@ socket2.on('connect', function(){
 socket2.on(field_id, function(data){
     if(data == "shoot")
     {
-        exec_photo(cmd_photo, function(error, stdout, stderr){
-            console.log('Photo Saved : ',photo_path);
-            delivery.send({
-                name: timeInMs,
-                path: __dirname+'/images/'+ timeInMs,
-                params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
-            });
-        })
+        timeInMs = Date.now();
+        photo_path = __dirname+"/images/"+timeInMs+".jpg";
+        cmd_photo = 'raspistill -t 1 -w 600 -h 420 -o '+photo_path;
+        executing_photo();
     }
     else{
         console.log('web_socket : ' + data);
         camera.stop();
         rederection();
     }
-
-
 });
 
 socket2.on('disconnect', function(){
     console.log('socket2 disconnected');
 });
 
+// 사용자 직접 촬영
+function executing_photo(){
+    exec_photo(cmd_photo, function(error, stdout, stderr){
+        console.log('Photo Saved : ',photo_path);
+    });
+
+    sending_photo();
+};
+
+function sending_photo(){
+    console.log("sending photo");
+    delivery.send({
+        name: timeInMs,
+        path: __dirname+'/images/'+ timeInMs,
+        params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
+    });
+};
