@@ -2,6 +2,7 @@
 
  //confi.json 에서 기본 설정값을 가져옴
  var config = require('./config.json');
+ var timeInMs = Date.now();
  var field_id = config.channel;
  var water_stop_time = config.water_stop_time;
  var shooting_time = config.shooting_time;
@@ -59,7 +60,7 @@ function module_start() {
 var socket2 = require('socket.io-client')('http://13.124.28.87:3000');
 //카메라 촬영 설정
 var exec_photo = require('child_process').exec;
-var photo_path = __dirname+"./images/image_%03d.jpg";
+var photo_path = __dirname+"./images/"+timeInMs+".jpg";
 var cmd_photo = 'raspistill -o '+photo_path;
 //카메라 모듈//
 var RaspiCam = require("raspicam"); //카메라 모듈
@@ -233,8 +234,8 @@ socket2.on(field_id, function(data){
         exec_photo(cmd_photo, function(error, stdout, stderr){
             console.log('Photo Saved : ',photo_path);
             delivery.send({
-                name: filename,
-                path: './images/' + filename,
+                name: timeInMs,
+                path: './images/' + timeInMs,
                 params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
             });
         })
