@@ -251,9 +251,8 @@ socket2.on('disconnect', function(){
 function executing_photo(){
     exec_photo(cmd_photo, function(error, stdout, stderr){
         console.log('Photo Saved : ', photo_path);
+        sending_photo();
     });
-    
-    sending_photo();
 };
 
 function sending_photo(){
