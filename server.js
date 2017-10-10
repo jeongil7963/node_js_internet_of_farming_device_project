@@ -232,7 +232,9 @@ socket2.on('connect', function(){
 socket2.on(field_id, function(data){
     if(data == "shoot")
     {
-        executing_photo();
+        exec_photo(cmd_photo, function(error, stdout, stderr){
+            console.log('Photo Saved : ', photo_path);
+        });
     }
     else{
         console.log('web_socket : ' + data);
@@ -247,9 +249,7 @@ socket2.on('disconnect', function(){
 
 // 사용자 직접 촬영
 function executing_photo() {
-    exec_photo(cmd_photo, function(error, stdout, stderr){
-        console.log('Photo Saved : ', photo_path);
-    });
+   
 };
 
 function sending_photo(){
