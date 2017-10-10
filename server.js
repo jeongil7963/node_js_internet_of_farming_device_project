@@ -263,5 +263,5 @@ function sending_photo(){
             path: __dirname+'/images/'+ timeInMs,
             params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
         });
-      }, 1000);
+      }, 5000);
 };
