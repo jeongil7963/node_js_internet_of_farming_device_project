@@ -247,14 +247,15 @@ socket2.on('disconnect', function(){
 
 // 사용자 직접 촬영
 function shooting_photo() {
-    exec_photo = require('child_process');
-    exec_photo.exec(cmd_photo);
-    /*
-    exec_photo(cmd_photo, function (error, stdout, stderr) {
-        console.log('Photo Saved : ', photo_path);
+    exec_photo = require('child_process').exec;
+    exec_photo(cmd_photo,function(err,stdout,stderr){
+        if(err){
+            console.log('child process exited with shooting_photo error code', err.code);
+            return;
+        }
+        console.log(stdout);
     });
-    */
-}
+};
 
 function sending_photo(){
     
