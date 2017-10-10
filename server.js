@@ -232,7 +232,7 @@ socket2.on('connect', function(){
 socket2.on(field_id, function(data){
     if(data == "shoot")
     {
-        
+        sending_photo();
     }
     else{
         console.log('web_socket : ' + data);
@@ -251,12 +251,10 @@ exec_photo(cmd_photo, function (error, stdout, stderr) {
 });
 
 function sending_photo(){
-    setTimeout(() => {
-        console.log("sending photo -- time out 1 second");
-        delivery.send({
-            name: timeInMs,
-            path: __dirname+'/images/'+ timeInMs,
-            params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
-        });
-      }, 5000);
+    console.log("sending photo");
+    delivery.send({
+        name: timeInMs,
+        path: __dirname+'/images/'+ timeInMs,
+        params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
+    });
 };
