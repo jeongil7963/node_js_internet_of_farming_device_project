@@ -224,9 +224,17 @@ socket2.on('connect', function(){
 });
 
 socket2.on(field_id, function(data){
-    console.log('web_socket : ' + data);
-    camera.stop();
-    rederection();
+    if(data == "shoot")
+    {
+        camera.read();
+    }
+    else{
+        console.log('web_socket : ' + data);
+        camera.stop();
+        rederection();
+    }
+
+
 });
 
 socket2.on('disconnect', function(){
