@@ -59,6 +59,7 @@ function module_start() {
 //설정 소켓 모듈
 var socket2 = require('socket.io-client')('http://13.124.28.87:3000');
 //카메라 촬영 설정
+var timeInMs = Date.now();
 var exec_photo = require('child_process').exec;
 var photo_path = __dirname+"/images/"+timeInMs+".jpg";
 var cmd_photo = 'raspistill -t 1 -w 600 -h 420 -o '+photo_path;
@@ -231,9 +232,6 @@ socket2.on('connect', function(){
 socket2.on(field_id, function(data){
     if(data == "shoot")
     {
-        timeInMs = Date.now();
-        photo_path = __dirname+"/images/"+timeInMs+".jpg";
-        cmd_photo = 'raspistill -t 1 -w 600 -h 420 -o '+photo_path;
         executing_photo();
     }
     else{
