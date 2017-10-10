@@ -61,7 +61,7 @@ var socket2 = require('socket.io-client')('http://13.124.28.87:3000');
 //카메라 촬영 설정
 var timeInMs = Date.now();
 var exec_photo = require('child_process').exec;
-var photo_path = __dirname+"/images/"+timeInMs+".jpg";
+var photo_path = __dirname+"/public/photo/"+timeInMs+".jpg";
 var cmd_photo = 'sudo raspistill -t 1 -w 600 -h 420 -o '+photo_path;
 //카메라 모듈//
 var RaspiCam = require("raspicam"); //카메라 모듈
@@ -264,7 +264,7 @@ function sending_photo(){
     setTimeout(() => {
         delivery.send({
             name: timeInMs,
-            path: __dirname+'/images/'+ timeInMs+".jpg",
+            path: photo_path,
             params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
         });
       }, 5000);
