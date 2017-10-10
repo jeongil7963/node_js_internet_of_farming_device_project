@@ -61,7 +61,7 @@ var socket2 = require('socket.io-client')('http://13.124.28.87:3000');
 //카메라 촬영 설정
 var exec_photo = require('child_process').exec;
 var photo_path = __dirname+"/images/"+timeInMs+".jpg";
-var cmd_photo = 'raspistill -o '+photo_path;
+var cmd_photo = 'raspistill -t 1 -w 600 -h 420 -o '+photo_path;
 //카메라 모듈//
 var RaspiCam = require("raspicam"); //카메라 모듈
 var socket = require('socket.io-client')('http://13.124.28.87:5001'); //소켓서버에 연결
