@@ -235,7 +235,7 @@ socket2.on(field_id, function(data){
     {
         timeInMs = moment().format('YYYYMMDDHH');
         photo_path = __dirname+"/images/"+timeInMs+".jpg";
-        cmd_photo = 'raspistill -t 1 -w 600 -h 420 -o '+photo_path;
+        cmd_photo = 'raspistill -hf -t 1 -w 600 -h 420 -o '+photo_path;
         camera.stop();
         setTimeout(() => {
             shooting_photo();
