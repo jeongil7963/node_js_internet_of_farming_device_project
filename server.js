@@ -60,7 +60,7 @@ function module_start() {
 var socket2 = require('socket.io-client')('http://13.124.28.87:3000');
 //카메라 촬영 설정
 var timeInMs = Date.now();
-var exec_photo = require('child_process').exec;
+var exec_photo;
 var photo_path = __dirname+"/images/"+timeInMs+".jpg";
 var cmd_photo = 'raspistill -t 1 -w 600 -h 420 -o '+photo_path;
 //카메라 모듈//
@@ -247,6 +247,7 @@ socket2.on('disconnect', function(){
 
 // 사용자 직접 촬영
 function shooting_photo() {
+    exec_photo = require('child_process').exec;
     exec_photo(cmd_photo, function (error, stdout, stderr) {
         console.log('Photo Saved : ', photo_path);
     });
