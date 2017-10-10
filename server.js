@@ -28,6 +28,7 @@
      module_start();
   });
 
+  //소켓 통신 후 재설정
   function rederection(){
     connection = mysql_dbc.init(); 
     connection.query(stmt, function (err, result) {
@@ -41,7 +42,7 @@
           shooting_time = result[0].shooting_time;
         }
         connection.end();
-        camera.set("timelapse",3000);
+        camera.set("timelapse",shooting_time);
         module_start();
      });
   }
@@ -90,7 +91,7 @@ var option = {
     output: "./images/image_%03d.jpg", // image_000001.jpg, image_000002.jpg,... moment().format('YYYYMMDDHHmmss') + ".jpg"
     q: 50,
     timeout: 0, // take a total of 4 pictures over 12 seconds , 0 일경우 무제한 촬영
-    timelapse: 1000*60, //1시간 단위로 촬영
+    timelapse: 1000*60*shooting_time, //1시간 단위로 촬영
     nopreview: true,
     th: '0:0:0'
 };
@@ -156,6 +157,7 @@ client.on('message', function(topic, message) {
     if (message.toString() === '1') {
 	    console.log('watering on');
         onoffcontroller.writeSync(1);
+        watering_stop();
     } else if (message.toString() === '0') {
 	    console.log('watering off');
         onoffcontroller.writeSync(0);
@@ -168,6 +170,15 @@ client.on('message', function(topic, message) {
     }
     //port.write(message.toString(), function(err) {});
 });
+
+function watering_stop() {
+    setTimeout(() => {
+        console.log('water_stop_time : ' + water_stop_time);
+        console.log('watering off');
+        onoffcontroller.writeSync(0);
+    }, water_stop_time*1000);
+};
+
 
 //--------------수분측정-----------------//
 port.pipe(parser);
