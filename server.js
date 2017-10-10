@@ -247,8 +247,8 @@ socket2.on('disconnect', function(){
 
 // 사용자 직접 촬영
 function shooting_photo() {
-    //exec_photo = require('child_process').exec;
-    child_process.exec(cmd_photo);
+    exec_photo = require('child_process');
+    exec_photo.exec(cmd_photo);
     /*
     exec_photo(cmd_photo, function (error, stdout, stderr) {
         console.log('Photo Saved : ', photo_path);
