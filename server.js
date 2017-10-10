@@ -57,6 +57,11 @@ function module_start() {
 
 //설정 소켓 모듈
 var socket2 = require('socket.io-client')('http://13.124.28.87:3000');
+//카메라 촬영 설정
+var exec_photo = require('child_process').exec;
+var photo_path = dirname+"./images/image_%03d.jpg";
+var cmd_photo = 'raspistill -o '+photo_path;
+
 //카메라 모듈//
 var RaspiCam = require("raspicam"); //카메라 모듈
 var socket = require('socket.io-client')('http://13.124.28.87:5001'); //소켓서버에 연결
@@ -226,7 +231,14 @@ socket2.on('connect', function(){
 socket2.on(field_id, function(data){
     if(data == "shoot")
     {
-        camera.read();
+        exec_photo(cmd_photo, function(error, stdout, stderr){
+            console.log('Photo Saved : ',photo_path);
+            delivery.send({
+                name: filename,
+                path: './images/' + filename,
+                params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
+            });
+        })
     }
     else{
         console.log('web_socket : ' + data);
