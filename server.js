@@ -234,17 +234,7 @@ socket2.on(field_id, function(data){
         timeInMs = Date.now();
         photo_path = __dirname+"/images/"+timeInMs+".jpg";
         cmd_photo = 'raspistill -t 1 -w 600 -h 420 -o '+photo_path;
-        asyncFunction1(function(input, result1) {
-            asyncFunction2(function(result2) {
-              asyncFunction3(function(result3) {
-                asyncFunction4(function(result4) {
-                  asyncFunction5(function(output) {
-                      // finally, do something...
-                  });
-                });
-              });
-            });
-          });
+        executing_photo();
     }
     else{
         console.log('web_socket : ' + data);
