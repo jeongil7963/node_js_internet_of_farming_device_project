@@ -254,7 +254,7 @@ function sending_photo(){
     console.log("sending photo");
     delivery.send({
         name: timeInMs,
-        path: __dirname+'/images/'+ timeInMs,
+        path: __dirname+'/images/'+ timeInMs+".jpg",
         params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
     });
 };
