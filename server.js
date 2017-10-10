@@ -252,6 +252,7 @@ function executing_photo(){
     exec_photo(cmd_photo, function(error, stdout, stderr){
         console.log('Photo Saved : ', photo_path);
     });
+    
     sending_photo();
 };
 
