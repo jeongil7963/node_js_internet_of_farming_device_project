@@ -2,7 +2,6 @@
 
  //confi.json 에서 기본 설정값을 가져옴
  var config = require('./config.json');
- var timeInMs;
  var field_id = config.channel;
  var water_stop_time = config.water_stop_time;
  var shooting_time = config.shooting_time;
@@ -61,8 +60,8 @@ var socket2 = require('socket.io-client')('http://13.124.28.87:3000');
 //카메라 촬영 설정
 var timeInMs = Date.now();
 var exec_photo = require('child_process').exec;
-var photo_path = __dirname+"/public/photo/"+timeInMs+".jpg";
-var cmd_photo = 'sudo raspistill -t 1 -w 600 -h 420 -o '+photo_path;
+var photo_path = __dirname+"/images/"+timeInMs+".jpg";
+var cmd_photo = 'raspistill -t 1 -w 600 -h 420 -o '+photo_path;
 //카메라 모듈//
 var RaspiCam = require("raspicam"); //카메라 모듈
 var socket = require('socket.io-client')('http://13.124.28.87:5001'); //소켓서버에 연결
@@ -232,7 +231,10 @@ socket2.on('connect', function(){
 socket2.on(field_id, function(data){
     if(data == "shoot")
     {
-        shooting_photo();
+        camera.stop();
+        setTimeout(() => {
+            shooting_photo();
+          }, 500);
     }
     else{
         console.log('web_socket : ' + data);
@@ -253,20 +255,16 @@ function shooting_photo() {
             return;
         }
         console.log(stdout);
+        sending_photo();
     });
 };
 
 function sending_photo(){
-    
-
     console.log("sending photo");
-    
-    setTimeout(() => {
-        delivery.send({
-            name: timeInMs,
-            path: photo_path,
-            params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
-        });
-      }, 5000);
-  
+    delivery.send({
+        name: timeInMs,
+        path: __dirname+'/images/'+ timeInMs+".jpg",
+        params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
+    });
+    module_start();
 };
