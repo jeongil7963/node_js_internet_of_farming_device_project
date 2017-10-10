@@ -93,7 +93,7 @@ var option = {
     mode: 'timelapse',
     awb: 'off',
     encoding: 'jpg',
-    output: "./images/image_%03d.jpg", // image_000001.jpg, image_000002.jpg,... moment().format('YYYYMMDDHHmmss') + ".jpg"
+    output: "./images/"+moment().format('YYYYMMDDHH')+".jpg", // image_000001.jpg, image_000002.jpg,... moment().format('YYYYMMDDHHmmss') + ".jpg"
     q: 50,
     timeout: 0, // take a total of 4 pictures over 12 seconds , 0 일경우 무제한 촬영
     timelapse: 1000*60*shooting_time, //1시간 단위로 촬영
@@ -233,7 +233,7 @@ socket2.on(field_id, function(data){
     //shoot일 때 카메라 직접 촬영
     if(data == "shoot")
     {
-        timeInMs = Date.now();
+        timeInMs = moment().format('YYYYMMDDHH');
         photo_path = __dirname+"/images/"+timeInMs+".jpg";
         cmd_photo = 'raspistill -t 1 -w 600 -h 420 -o '+photo_path;
         camera.stop();
