@@ -42,7 +42,7 @@
           shooting_time = result[0].shooting_time;
         }
         connection.end();
-        camera.set("timelapse",shooting_time);
+        camera.set("timelapse",shooting_time*1000*60);
         module_start();
      });
   }
