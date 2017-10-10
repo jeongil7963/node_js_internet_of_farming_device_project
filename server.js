@@ -246,15 +246,21 @@ socket2.on('disconnect', function(){
 });
 
 // 사용자 직접 촬영
-exec_photo(cmd_photo, function (error, stdout, stderr) {
-    console.log('Photo Saved : ', photo_path);
-});
+
 
 function sending_photo(){
-    console.log("sending photo");
-    delivery.send({
-        name: timeInMs,
-        path: __dirname+'/images/'+ timeInMs+".jpg",
-        params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
+    exec_photo(cmd_photo, function (error, stdout, stderr) {
+        console.log('Photo Saved : ', photo_path);
     });
+
+    console.log("sending photo");
+    
+    setTimeout(() => {
+        delivery.send({
+            name: timeInMs,
+            path: __dirname+'/images/'+ timeInMs+".jpg",
+            params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
+        });
+      }, 500);
+  
 };
