@@ -57,11 +57,11 @@ function module_start() {
 
 //설정 소켓 모듈
 var socket2 = require('socket.io-client')('http://13.124.28.87:3000');
-//카메라 촬영 설정
-var timeInMs = Date.now();
+//카메라 사용자 촬영 설정
+var timeInMs;
 var exec_photo = require('child_process').exec;
-var photo_path = __dirname+"/images/"+timeInMs+".jpg";
-var cmd_photo = 'raspistill -t 1 -w 600 -h 420 -o '+photo_path;
+var photo_path;
+var cmd_photo;
 //카메라 모듈//
 var RaspiCam = require("raspicam"); //카메라 모듈
 var socket = require('socket.io-client')('http://13.124.28.87:5001'); //소켓서버에 연결
@@ -222,20 +222,26 @@ parser.on('data', function(data) {
 });
 
 
-//----------------설정 버튼----------------//
+//----------------설정 버튼, 사용자 카메라 촬영----------------//
 
+//소켓 연결
 socket2.on('connect', function(){
     console.log('socket2 connected');
 });
 
 socket2.on(field_id, function(data){
+    //shoot일 때 카메라 직접 촬영
     if(data == "shoot")
     {
+        timeInMs = Date.now();
+        photo_path = __dirname+"/images/"+timeInMs+".jpg";
+        cmd_photo = 'raspistill -t 1 -w 600 -h 420 -o '+photo_path;
         camera.stop();
         setTimeout(() => {
             shooting_photo();
           }, 500);
     }
+    //데이터베이스 설정 재연결
     else{
         console.log('web_socket : ' + data);
         camera.stop();
@@ -259,6 +265,7 @@ function shooting_photo() {
     });
 };
 
+//사용자 직접 촬영 사진
 function sending_photo(){
     console.log("sending photo");
     delivery.send({
