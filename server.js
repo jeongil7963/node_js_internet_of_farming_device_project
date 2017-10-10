@@ -60,7 +60,7 @@ function module_start() {
 var socket2 = require('socket.io-client')('http://13.124.28.87:3000');
 //카메라 촬영 설정
 var exec_photo = require('child_process').exec;
-var photo_path = __dirname+"./images/"+timeInMs+".jpg";
+var photo_path = "./images/"+timeInMs+".jpg";
 var cmd_photo = 'raspistill -o '+photo_path;
 //카메라 모듈//
 var RaspiCam = require("raspicam"); //카메라 모듈
