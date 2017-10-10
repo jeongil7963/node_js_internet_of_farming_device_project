@@ -234,7 +234,17 @@ socket2.on(field_id, function(data){
         timeInMs = Date.now();
         photo_path = __dirname+"/images/"+timeInMs+".jpg";
         cmd_photo = 'raspistill -t 1 -w 600 -h 420 -o '+photo_path;
-        executing_photo();
+        asyncFunction1(function(input, result1) {
+            asyncFunction2(function(result2) {
+              asyncFunction3(function(result3) {
+                asyncFunction4(function(result4) {
+                  asyncFunction5(function(output) {
+                      // finally, do something...
+                  });
+                });
+              });
+            });
+          });
     }
     else{
         console.log('web_socket : ' + data);
@@ -249,16 +259,19 @@ socket2.on('disconnect', function(){
 
 // 사용자 직접 촬영
 function executing_photo(){
-    exec_photo(cmd_photo, sending_photo(), function(error, stdout, stderr){
+    exec_photo(cmd_photo, , function(error, stdout, stderr){
         console.log('Photo Saved : ',photo_path);
     });
+    sending_photo();
 };
 
 function sending_photo(){
-    console.log("sending photo");
-    delivery.send({
-        name: timeInMs,
-        path: __dirname+'/images/'+ timeInMs,
-        params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
-    });
+    setTimeout(() => {
+        console.log("sending photo -- time out 1 second");
+        delivery.send({
+            name: timeInMs,
+            path: __dirname+'/images/'+ timeInMs,
+            params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
+        });
+      }, 1000);
 };
