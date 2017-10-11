@@ -62,7 +62,7 @@ var timeInMs;
 var exec_photo = require('child_process').exec;
 var photo_path;
 var cmd_photo;
-var fs = require('fs');
+var fs = require('file-system');
 //카메라 모듈//
 var RaspiCam = require("raspicam"); //카메라 모듈
 var socket = require('socket.io-client')('http://13.124.28.87:5001'); //소켓서버에 연결
@@ -139,13 +139,11 @@ camera.on("read", function(err, timestamp, filename) {
 
 function renaming_camera(){
     setTimeout(() => {
-        fs.rename(
-            "./images/camera.jpg",  
-            "./images/"+moment().format('YYYYMMDDHH')+".jpg", 
-            function (err) { 
-                if (err) throw err; 
-                console.log('renamed complete'); 
-            });
+        fs.copyFile( "./images/camera.jpg","./images/"+moment().format('YYYYMMDDHH')+".jpg", {
+            done: function(err) {
+              console.log('copy done');
+            }
+          });
     }, 5000);
 };
 
