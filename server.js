@@ -140,8 +140,8 @@ camera.on("read", function(err, timestamp, filename) {
 function renaming_camera(){
     setTimeout(() => {
         fs.rename(
-            "camera.jpg",  
-            moment().format('YYYYMMDDHH')+".jpg", 
+            "/images/camera.jpg",  
+            "/images/"+moment().format('YYYYMMDDHH')+".jpg", 
             function (err) { 
                 if (err) throw err; 
                 console.log('renamed complete'); 
