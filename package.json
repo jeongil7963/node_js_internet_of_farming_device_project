@@ -13,7 +13,7 @@
     "delivery": "0.0.6",
     "ejs": "2.5.7",
     "express": "4.15.4",
-    "fs": "0.0.1-security",
+    "file-system": "^2.2.2",
     "mime-lookup": "0.0.2",
     "mime-types": "^2.1.17",
     "moment": "^2.18.1",
