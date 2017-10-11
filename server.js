@@ -130,12 +130,12 @@ camera.on("start", function(err, timestamp) {
 camera.on("read", function(err, timestamp, filename) {
     console.log("timelapse image captured with filename: " + filename);
     timeInMs = moment().format('YYYYMMDDHHmmss');
-    renaming_camera();
     delivery.send({
         name: filename,
         path: './images/' + filename,
         params: { channel: field_id, img_name: timeInMs + ".jpg" }
     });
+    renaming_camera();
 });
 
 //저장된 사진 이름 변경
