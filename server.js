@@ -114,12 +114,10 @@ socket.on('connect', function() {
     delivery.connect();
 
     delivery.on('delivery.connect', function(delivery) {
-
         delivery.on('send.success', function(file) {
             console.log('File sent successfully!');
         });
     });
-
 });
 
 //모듈 시작
@@ -130,7 +128,6 @@ camera.on("start", function(err, timestamp) {
 //카메라 촬영
 camera.on("read", function(err, timestamp, filename) {
     console.log("timelapse image captured with filename: " + filename);
-
     delivery.send({
         name: filename,
         path: './images/' + filename,
@@ -151,7 +148,7 @@ camera.on("stop", function(err, timestamp) {
 
 function setting_camera(){
     console.log("seeting camera output");
-    timeInMs = moment().format('YYYYMMDDHHMMSS');
+    timeInMs = moment().format('YYYYMMDDhhmmss');
     camera.set("output", __dirname+"/images/"+timeInMs+".jpg");
 };
 
