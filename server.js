@@ -130,14 +130,13 @@ camera.on("start", function(err, timestamp) {
 //카메라 촬영
 camera.on("read", function(err, timestamp, filename) {
     console.log("timelapse image captured with filename: " + filename);
-    timeInMs = moment().format('YYYYMMDDHHMMSS');
-    camera.set("output", __dirname+"/images/"+timeInMs+".jpg");
 
     delivery.send({
         name: filename,
         path: './images/' + filename,
         params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
     });
+    setting_camera();
 });
 
 //모듈 종료
@@ -149,6 +148,12 @@ camera.on("exit", function(timestamp) {
 camera.on("stop", function(err, timestamp) {
     console.log("timelapse child process has been stopped at " + timestamp);
 });
+
+function setting_camera(){
+    console.log("seeting camera output");
+    timeInMs = moment().format('YYYYMMDDHHMMSS');
+    camera.set("output", __dirname+"/images/"+timeInMs+".jpg");
+};
 
 //--------------관수-----------------//
 //MQTT pub/sub
