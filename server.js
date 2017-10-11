@@ -138,13 +138,15 @@ camera.on("read", function(err, timestamp, filename) {
 });
 
 function renaming_camera(){
-    fs.rename(
-        __dirname+"/images/camera.jpg",  
-        moment().format('YYYYMMDDHH')+".jpg", 
-        function (err) { 
-            if (err) throw err; 
-            console.log('renamed complete'); 
-        });
+    setTimeout(() => {
+        fs.rename(
+            __dirname+"/images/camera.jpg",  
+            moment().format('YYYYMMDDHH')+".jpg", 
+            function (err) { 
+                if (err) throw err; 
+                console.log('renamed complete'); 
+            });
+    }, 2000);
 };
 
 //모듈 종료
