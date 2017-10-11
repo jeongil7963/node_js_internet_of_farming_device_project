@@ -42,7 +42,7 @@
           shooting_time = result[0].shooting_time;
         }
         connection.end();
-        camera.set("timelapse",shooting_time*1000*60);
+        camera.set("timelapse",1000*10);
         module_start();
      });
   }
@@ -85,7 +85,6 @@ var port = new SerialPort('/dev/ttyACM0', {
     baudrate: 9600
 });
 
-
 //--------------카메라-----------------//
 var option = {
     width: 600,
@@ -93,7 +92,7 @@ var option = {
     mode: 'timelapse',
     awb: 'off',
     encoding: 'jpg',
-    output: "./images/"+moment().format('YYYYMMDDHHMMSS')+".jpg", // image_000001.jpg, image_000002.jpg,... moment().format('YYYYMMDDHHmmss') + ".jpg"
+    output: __dirname+"/images/"+moment().format('YYYYMMDDHHMMSS')+".jpg", // image_000001.jpg, image_000002.jpg,... moment().format('YYYYMMDDHHmmss') + ".jpg"
     q: 50,
     timeout: 0, // take a total of 4 pictures over 12 seconds , 0 일경우 무제한 촬영
     timelapse: 1000*60*shooting_time, //1시간 단위로 촬영
