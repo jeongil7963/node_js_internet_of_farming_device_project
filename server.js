@@ -129,17 +129,17 @@ camera.on("start", function(err, timestamp) {
 //카메라 촬영
 camera.on("read", function(err, timestamp, filename) {
     console.log("timelapse image captured with filename: " + filename);
+    timeInMs = moment().format('YYYYMMDDHHmmss');
+    renaming_camera();
     delivery.send({
         name: filename,
         path: './images/' + filename,
-        params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
+        params: { channel: field_id, img_name: timeInMs + ".jpg" }
     });
-    renaming_camera();
 });
 
 //저장된 사진 이름 변경
 function renaming_camera(){
-    timeInMs = moment().format('YYYYMMDDhhmmss');
     setTimeout(() => {
         fs.copyFile( "./images/camera.jpg","./images/"+timeInMs+".jpg", {
             done: function(err) {
@@ -278,11 +278,10 @@ function shooting_photo() {
 //사용자 직접 촬영 사진
 function sending_photo(){
     console.log("sending photo");
-    
     delivery.send({
         name: timeInMs,
         path: __dirname+'/images/'+ timeInMs+".jpg",
-        params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
+        params: { channel: field_id, img_name: timeInMs + ".jpg" }
     });
     module_start();
 };
