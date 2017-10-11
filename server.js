@@ -146,7 +146,7 @@ function renaming_camera(){
                 if (err) throw err; 
                 console.log('renamed complete'); 
             });
-    }, 2000);
+    }, 5000);
 };
 
 //모듈 종료
