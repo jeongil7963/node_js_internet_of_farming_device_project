@@ -266,7 +266,7 @@ function shooting_photo() {
             console.log('child process exited with shooting_photo error code', err.code);
             return;
         }
-        console.log(stdout);
+        console.log("timelapse image captured with filename: " +timeInMs);
         sending_photo();
     });
 };
@@ -274,6 +274,7 @@ function shooting_photo() {
 //사용자 직접 촬영 사진
 function sending_photo(){
     console.log("sending photo");
+    
     delivery.send({
         name: timeInMs,
         path: __dirname+'/images/'+ timeInMs+".jpg",
