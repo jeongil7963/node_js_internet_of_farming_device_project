@@ -62,7 +62,6 @@ var timeInMs;
 var exec_photo = require('child_process').exec;
 var photo_path;
 var cmd_photo;
-var pictureFilename = __dirname+"/images/"+moment().format('YYYYMMDDhhmmss')+".jpg";
 //카메라 모듈//
 var RaspiCam = require("raspicam"); //카메라 모듈
 var socket = require('socket.io-client')('http://13.124.28.87:5001'); //소켓서버에 연결
@@ -86,7 +85,7 @@ var port = new SerialPort('/dev/ttyACM0', {
     baudrate: 9600
 });
 
-
+var pictureFilename = __dirname+"/images/"+moment().format('YYYYMMDDhhmmss')+".jpg";
 //--------------카메라-----------------//
 var option = {
     width: 600,
