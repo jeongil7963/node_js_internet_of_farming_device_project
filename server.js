@@ -42,7 +42,7 @@
           shooting_time = result[0].shooting_time;
         }
         connection.end();
-        camera.set("timelapse",1000*10);
+        camera.set("timelapse",1000*60*shooting_time);
         module_start();
      });
   }
@@ -137,6 +137,7 @@ camera.on("read", function(err, timestamp, filename) {
     renaming_camera();
 });
 
+//저장된 사진 이름 변경
 function renaming_camera(){
     timeInMs = moment().format('YYYYMMDDhhmmss');
     setTimeout(() => {
