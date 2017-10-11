@@ -243,7 +243,7 @@ socket2.on(field_id, function(data){
     //shoot일 때 카메라 직접 촬영
     if(data == "shoot")
     {
-        timeInMs = moment().format('YYYYMMDDhhmmss');
+        timeInMs = moment().format('YYYYMMDDHHmmss');
         photo_path = __dirname+"/images/"+timeInMs+".jpg";
         cmd_photo = 'raspistill -vf -t 1 -w 600 -h 420 -o '+photo_path;
         camera.stop();
