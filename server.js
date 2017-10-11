@@ -62,6 +62,7 @@ var timeInMs;
 var exec_photo = require('child_process').exec;
 var photo_path;
 var cmd_photo;
+var fs = require('fs');
 //카메라 모듈//
 var RaspiCam = require("raspicam"); //카메라 모듈
 var socket = require('socket.io-client')('http://13.124.28.87:5001'); //소켓서버에 연결
@@ -85,7 +86,6 @@ var port = new SerialPort('/dev/ttyACM0', {
     baudrate: 9600
 });
 
-var pictureFilename = __dirname+"/images/"+moment().format('YYYYMMDDhhmmss')+".jpg";
 //--------------카메라-----------------//
 var option = {
     width: 600,
@@ -93,7 +93,7 @@ var option = {
     mode: 'timelapse',
     awb: 'off',
     encoding: 'jpg',
-    output: pictureFilename, // image_000001.jpg, image_000002.jpg,... moment().format('YYYYMMDDHHmmss') + ".jpg"
+    output: __dirname+"/images/camera.jpg", // image_000001.jpg, image_000002.jpg,... moment().format('YYYYMMDDHHmmss') + ".jpg"
     q: 50,
     timeout: 0, // take a total of 4 pictures over 12 seconds , 0 일경우 무제한 촬영
     timelapse: 1000*60*shooting_time, //1시간 단위로 촬영
@@ -134,8 +134,18 @@ camera.on("read", function(err, timestamp, filename) {
         path: './images/' + filename,
         params: { channel: field_id, img_name: moment().format('YYYYMMDDHH') + ".jpg" }
     });
-    setting_camera();
+    renaming_camera();
 });
+
+function renaming_camera(){
+    fs.rename(
+        __dirname+"/images/camera.jpg",  
+        moment().format('YYYYMMDDHH')+".jpg", 
+        function (err) { 
+            if (err) throw err; 
+            console.log('renamed complete'); 
+        });
+};
 
 //모듈 종료
 camera.on("exit", function(timestamp) {
@@ -146,13 +156,6 @@ camera.on("exit", function(timestamp) {
 camera.on("stop", function(err, timestamp) {
     console.log("timelapse child process has been stopped at " + timestamp);
 });
-
-function setting_camera(){
-    console.log("seeting camera output");
-    timeInMs = moment().format('YYYYMMDDhhmmss');
-    camera.set("output", __dirname+"/images/"+timeInMs+".jpg");
-    pictureFilename = __dirname+"/images/"+moment().format('YYYYMMDDhhmmss')+".jpg";
-};
 
 //--------------관수-----------------//
 //MQTT pub/sub
