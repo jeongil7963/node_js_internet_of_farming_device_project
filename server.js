@@ -140,7 +140,7 @@ camera.on("read", function(err, timestamp, filename) {
 function renaming_camera(){
     setTimeout(() => {
         fs.rename(
-            "./images/camera.jpg",  
+            "camera.jpg",  
             moment().format('YYYYMMDDHH')+".jpg", 
             function (err) { 
                 if (err) throw err; 
