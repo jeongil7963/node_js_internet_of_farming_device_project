@@ -138,8 +138,9 @@ camera.on("read", function(err, timestamp, filename) {
 });
 
 function renaming_camera(){
+    timeInMs = moment().format('YYYYMMDDhhmmss');
     setTimeout(() => {
-        fs.copyFile( "./images/camera.jpg","./images/"+moment().format('YYYYMMDDHH')+".jpg", {
+        fs.copyFile( "./images/camera.jpg","./images/"+timeInMs+".jpg", {
             done: function(err) {
               console.log('copy done');
             }
