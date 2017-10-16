@@ -6,7 +6,8 @@
  var water_stop_time = config.water_stop_time;
  var shooting_time = config.shooting_time;
  var current_min;
- var sub_min;   
+ var sub_min;
+ var camera_interval;
 //mysql db 연동
  var mysql_dbc = require('./db_con/db_con')();
  var connection = mysql_dbc.init();
@@ -43,7 +44,6 @@
           shooting_time = result[0].shooting_time;
         }
         connection.end();
-        camera.set("timelapse",1000*60*shooting_time);
         module_start();
      });
   }
@@ -52,15 +52,19 @@
 function module_start() {
     current_min = moment().format('m');
     console.log("current_min : " + current_min);
-    sub_min = shooting_time - (current_min % shooting_time);
+    if( (current_min % shooting_time) == 0){
+        sub_min = 0;
+    }
+    else {
+        sub_min = shooting_time - (current_min % shooting_time);
+    }
     console.log('sub_min : ' + sub_min);
+    
     setTimeout(() => {
-        console.log('timeout 1 second');
-        camera.start();
-    }, 1000*60);
+        console.log('timeout ' + sub_min + 'minute');
+        camera_starting();
+    }, 1000*60*sub_min);
 };
-
-
 
 //설정 소켓 모듈
 var socket2 = require('socket.io-client')('http://13.124.28.87:3000');
@@ -93,26 +97,7 @@ var port = new SerialPort('/dev/ttyACM0', {
     baudrate: 9600
 });
 
-//--------------카메라-----------------//
-var option = {
-    width: 600,
-    height: 420,
-    mode: 'timelapse',
-    awb: 'off',
-    encoding: 'jpg',
-    output: __dirname+"/images/camera.jpg", // image_000001.jpg, image_000002.jpg,... moment().format('YYYYMMDDHHmmss') + ".jpg"
-    q: 50,
-    timeout: 0, // take a total of 4 pictures over 12 seconds , 0 일경우 무제한 촬영
-    timelapse: 1000*60*shooting_time, //1시간 단위로 촬영
-    nopreview: true,
-    th: '0:0:0',
-    vflip : true
-};
-
-var camera = new RaspiCam(option);
-
 //소켓통신으로 이미지 파일을 서버로 전송
-
 var temp = {};
 
 socket.on('connect', function() {
@@ -128,43 +113,38 @@ socket.on('connect', function() {
     });
 });
 
-//모듈 시작
-camera.on("start", function(err, timestamp) {
-    console.log("timelapse started at " + timestamp);
-});
-
-//카메라 촬영
-camera.on("read", function(err, timestamp, filename) {
-    console.log("timelapse image captured with filename: " + filename);
-    timeInMs = moment().format('YYYYMMDDHHmmss');
-    delivery.send({
-        name: filename,
-        path: './images/' + filename,
-        params: { channel: field_id, img_name: timeInMs + ".jpg" }
-    });
-    renaming_camera();
-});
-
-//저장된 사진 이름 변경
-function renaming_camera(){
-    setTimeout(() => {
-        fs.copyFile( "./images/camera.jpg","./images/"+timeInMs+".jpg", {
-            done: function(err) {
-              console.log('copy done');
-            }
-          });
-    }, 5000);
+function camera_starting(){
+    camera_interval = setInterval(camera_setting, 1000*60*sub_min);
 };
 
-//모듈 종료
-camera.on("exit", function(timestamp) {
-    console.log("timelapse child process has exited");
-});
+function camera_setting(){
+    timeInMs = moment().format('YYYYMMDDHHmmss');
+    photo_path = __dirname+"/images/"+timeInMs+".jpg";
+    cmd_photo = 'raspistill -vf -t 1 -w 600 -h 420 -o '+photo_path;
+    setTimeout(() => {
+        camera_shooting();
+      }, 500);
+};
 
-//모듈 정지
-camera.on("stop", function(err, timestamp) {
-    console.log("timelapse child process has been stopped at " + timestamp);
-});
+function camera_shooting(){
+    exec_photo(cmd_photo,function(err,stdout,stderr){
+        if(err){
+            console.log('child process exited with shooting_photo error code', err.code);
+            return;
+        }
+        console.log("timelapse image captured with filename: " +timeInMs);
+        camera_sending();
+    });
+}
+
+function camera_sending(){
+    console.log("sending photo");
+    delivery.send({
+        name: timeInMs,
+        path: __dirname+'/images/'+ timeInMs+".jpg",
+        params: { channel: field_id, img_name: timeInMs + ".jpg" }
+    });
+};
 
 //--------------관수-----------------//
 //MQTT pub/sub
@@ -250,18 +230,13 @@ socket2.on(field_id, function(data){
     //shoot일 때 카메라 직접 촬영
     if(data == "shoot")
     {
-        timeInMs = moment().format('YYYYMMDDHHmmss');
-        photo_path = __dirname+"/images/"+timeInMs+".jpg";
-        cmd_photo = 'raspistill -vf -t 1 -w 600 -h 420 -o '+photo_path;
-        camera.stop();
-        setTimeout(() => {
-            shooting_photo();
-          }, 500);
+        console.log('client camera shoot');
+        camera_setting();
     }
     //데이터베이스 설정 재연결
     else{
         console.log('web_socket : ' + data);
-        camera.stop();
+        clearInterval(camera_interval);
         rederection();
     }
 });
@@ -269,26 +244,3 @@ socket2.on(field_id, function(data){
 socket2.on('disconnect', function(){
     console.log('socket2 disconnected');
 });
-
-// 사용자 직접 촬영
-function shooting_photo() {
-    exec_photo(cmd_photo,function(err,stdout,stderr){
-        if(err){
-            console.log('child process exited with shooting_photo error code', err.code);
-            return;
-        }
-        console.log("timelapse image captured with filename: " +timeInMs);
-        sending_photo();
-    });
-};
-
-//사용자 직접 촬영 사진
-function sending_photo(){
-    console.log("sending photo");
-    delivery.send({
-        name: timeInMs,
-        path: __dirname+'/images/'+ timeInMs+".jpg",
-        params: { channel: field_id, img_name: timeInMs + ".jpg" }
-    });
-    module_start();
-};
