@@ -13,7 +13,6 @@
     "delivery": "0.0.6",
     "ejs": "2.5.7",
     "express": "4.15.4",
-    "file-system": "^2.2.2",
     "mime-lookup": "0.0.2",
     "mime-types": "^2.1.17",
     "moment": "^2.18.1",
@@ -21,7 +20,6 @@
     "mqtt": "^2.12.0",
     "mysql": "^2.14.1",
     "onoff": "^1.1.7",
-    "raspicam": "0.2.14",
     "serialport": "5.0.0",
     "socket.io-client": "2.0.3",
     "socket_io": "^1.0.0"
