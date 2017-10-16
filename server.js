@@ -1,13 +1,45 @@
 'use strict';
 
- //confi.json 에서 기본 설정값을 가져옴
- var config = require('./config.json');
- var field_id = config.channel;
- var water_stop_time = config.water_stop_time;
- var shooting_time = config.shooting_time;
- var current_min;
- var sub_min;
- var camera_interval;
+// config.json 에서 기본 설정값을 가져옴
+ var config = require('./config.json'); 
+ var field_id = config.channel; // field_id 값 설정
+ var water_stop_time = config.water_stop_time; // water_stop_time 값 설정
+ var shooting_time = config.shooting_time; //shooting time 값 설정
+
+ var current_min; // 현재 시각 '분'
+ var sub_min; // 촬영 시작 전 시간
+ var camera_interval; // camera 모듈 반복 제어
+
+//설정 및 촬영 소켓 모듈
+var socket2 = require('socket.io-client')('http://13.124.28.87:3000');
+
+//카메라 사용자 촬영 설정
+var timeInMs;
+var exec_photo = require('child_process').exec;
+var photo_path;
+var cmd_photo;
+
+var socket = require('socket.io-client')('http://13.124.28.87:5001'); // 소켓서버에 연결
+var dl = require('delivery'); // 파일 전송 모듈
+var moment = require('moment'); // moment 시간 모듈
+var mqtt = require('mqtt'); // mqtt 모듈
+var client = mqtt.connect('mqtt://13.124.28.87'); // mqtt 서버 접속
+var http = require('http'); // http socket
+var delivery; // delivery 전역 설정
+//관수 모듈//
+var GPIO = require('onoff').Gpio;
+var onoffcontroller = new GPIO(21, 'out');
+//수분 측정 모듈//
+var SerialPort = require('serialport'); //아두이노와 시리얼 통신할 수 있는 모듈
+var parsers = SerialPort.parsers;
+var parser = new parsers.Readline({
+    delimiter: '\r\n'
+});
+//라즈베리파이와 연결된 디바이스 주소
+var port = new SerialPort('/dev/ttyACM0', {
+    baudrate: 9600
+});
+
 //mysql db 연동
  var mysql_dbc = require('./db_con/db_con')();
  var connection = mysql_dbc.init();
@@ -17,7 +49,6 @@
  var stmt = 'SELECT * from device_setting where field_id = ' + field_id;
  connection.query(stmt, function (err, result) {
      console.log(result);
-
      if( result == "") {
        console.log("undefined setting");
        console.log("using default setting");
@@ -30,7 +61,7 @@
      module_start();
   });
 
-  //소켓 통신 후 재설정
+  //통신 후 db 재설정 및 카메라 모듈 재시작
   function rederection(){
     connection = mysql_dbc.init(); 
     connection.query(stmt, function (err, result) {
@@ -48,54 +79,25 @@
      });
   }
 
-//모듈 시작
+//카메라 모듈 시작
 function module_start() {
-    current_min = moment().format('m');
+    current_min = moment().format('m'); // 현재 시간 분 설정
     console.log("current_min : " + current_min);
-    if( (current_min % shooting_time) == 0){
+
+    if( (current_min % shooting_time) == 0){ // 만약 0이면 바로 촬영 시작
         sub_min = 0;
     }
-    else {
+    else { // 0이 아닐시 남은 시간 설정 후 촬영 시작
         sub_min = shooting_time - (current_min % shooting_time);
     }
     console.log('sub_min : ' + sub_min);
     
     setTimeout(() => {
-        console.log('timeout ' + sub_min + 'minute');
+        console.log('timeout ' + sub_min + ' minute');
         camera_starting();
-    }, 1000*60*sub_min);
+    }, 1000*60*sub_min); // 제한된 시간 후에 촬영 시작
 };
 
-//설정 소켓 모듈
-var socket2 = require('socket.io-client')('http://13.124.28.87:3000');
-//카메라 사용자 촬영 설정
-var timeInMs;
-var exec_photo = require('child_process').exec;
-var photo_path;
-var cmd_photo;
-var fs = require('file-system');
-//카메라 모듈//
-var RaspiCam = require("raspicam"); //카메라 모듈
-var socket = require('socket.io-client')('http://13.124.28.87:5001'); //소켓서버에 연결
-var dl = require('delivery'); //파일 전송 모듈
-var moment = require('moment');
-var mqtt = require('mqtt'); //mqtt 모듈
-var client = mqtt.connect('mqtt://13.124.28.87'); //mqtt 서버 접속
-var http = require('http'); //http socket
-var delivery;
-//관수 모듈//
-var GPIO = require('onoff').Gpio;
-var onoffcontroller = new GPIO(21, 'out');
-//수분 측정 모듈//
-var SerialPort = require('serialport'); //아두이노와 시리얼 통신할 수 있는 모듈
-var parsers = SerialPort.parsers;
-var parser = new parsers.Readline({
-    delimiter: '\r\n'
-});
-//라즈베리파이와 연결된 디바이스 주소
-var port = new SerialPort('/dev/ttyACM0', {
-    baudrate: 9600
-});
 
 //소켓통신으로 이미지 파일을 서버로 전송
 var temp = {};
@@ -114,7 +116,7 @@ socket.on('connect', function() {
 });
 
 function camera_starting(){
-    camera_interval = setInterval(camera_setting, 1000*60*sub_min);
+    camera_interval = setInterval(camera_setting, 1000*60*shooting_time);
 };
 
 function camera_setting(){
