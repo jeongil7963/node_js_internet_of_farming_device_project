@@ -5,7 +5,8 @@
  var field_id = config.channel;
  var water_stop_time = config.water_stop_time;
  var shooting_time = config.shooting_time;
- var repeat_time;
+ var current_min;
+ var sub_min;   
 //mysql db 연동
  var mysql_dbc = require('./db_con/db_con')();
  var connection = mysql_dbc.init();
@@ -49,13 +50,14 @@
 
 //모듈 시작
 function module_start() {
-    repeat_time = moment().format('mm');
-    console.log("-----------------practice---------------");
-    console.log(repeat_time);
+    current_min = moment().format('m');
+    console.log("current_min : " + current_min);
+    sub_min = current_min % water_stop_time;
+
     setTimeout(() => {
         console.log('timeout 1 second');
         camera.start();
-      }, 500);
+    }, 1000*60);
 };
 
 
