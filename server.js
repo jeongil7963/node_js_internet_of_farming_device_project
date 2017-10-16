@@ -52,8 +52,8 @@
 function module_start() {
     current_min = moment().format('m');
     console.log("current_min : " + current_min);
-    sub_min = current_min % water_stop_time;
-
+    sub_min = shooting_time - (current_min % shooting_time);
+    console.log('sub_min : ' + sub_min);
     setTimeout(() => {
         console.log('timeout 1 second');
         camera.start();
