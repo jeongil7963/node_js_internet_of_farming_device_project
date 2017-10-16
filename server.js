@@ -117,7 +117,8 @@ socket.on('connect', function() {
 
 // 카메라 설정 시간 간격 마다 촬영 실행
 function camera_starting(){
-    camera_interval = setInterval(camera_setting, 1000*60*shooting_time);
+    camera_setting(); // 처음 한번 촬영
+    camera_interval = setInterval(camera_setting, 1000*60*shooting_time); // 설정 시간 후에 반복 촬영
 };
 
 // 현재 시간으로 카메라 설정 세팅
@@ -240,7 +241,15 @@ socket2.on(field_id, function(data){
     //데이터베이스 설정 재연결
     else{
         console.log('web_socket : ' + data);
-        clearInterval(camera_interval);
+        if(camera_interval != null)
+        {
+            clearInterval(camera_interval);
+            
+        }
+        else
+        {
+            console.log('camera setting before starting shot')
+        }
         rederection();
     }
 });
